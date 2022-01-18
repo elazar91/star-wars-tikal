@@ -58,14 +58,17 @@ function App() {
     function showAllVehicles(data) {
       for (let i = 0; i < data.results.length; i++) {
         if (data.results[i].pilots?.length >= 1) {
-          vehiclesPilotsArray.push(data.results[i].pilots);
+          vehiclesPilotsArray.push({
+            pailotUrl: data.results[i].pilots,
+            name: data.results[i].name,
+          });
         }
       }
       if (data.next) {
         getAllVehicles(data.next);
       } else {
         setVehicles(vehiclesPilotsArray);
-        // console.log('vehicles: ',vehiclesPilotsArray)
+        console.log("vehicles: ", vehiclesPilotsArray);
       }
     }
 
@@ -99,14 +102,12 @@ function App() {
   function findPeopleInVehicles(vehiclesArray) {
     // console.log(vehiclesArray);
     return vehiclesArray?.forEach((arr) => {
-      // console.log(arr.length)
-      for (let i = 0; i < arr.length; i++) {
+      for (let i = 0; i < arr.pailotUrl.length; i++) {
         peoples?.forEach((p) => {
-          if (p.url === arr[i]) {
-            debugger;
+          if (p.url === arr.pailotUrl[i]) {
             planets.forEach((planet) => {
               if (planet.url === p.homeworld) {
-                console.log(`${planet.name} population: ${planet.population}`);
+                console.log(`${arr.name} population: ${planet.population}`);
               }
             });
           }
