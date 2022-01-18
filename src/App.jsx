@@ -5,11 +5,20 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 
 function App() {
-  const [vehicles, setVehicles] = useState([]);
-  const [peoples, setPeoples] = useState([]);
+  const [vehicles, setVehicles] = useState();
+  const [peoples, setPeoples] = useState();
   const [population, setPopulation] = useState();
 
-  useEffect(getAllDitales, []);
+  useEffect(
+    getAllDitales,
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    []
+  );
+  useEffect(
+    () => findPeopleInVehicles(vehicles),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [peoples]
+  );
   const vehiclesPilotsArray = [];
   const peopleNamesArray = [];
   const homeworldArray = [];
@@ -84,15 +93,20 @@ function App() {
     getAllPeopel("https://swapi.py4e.com/api/people/");
     getAllVehicles("https://swapi.py4e.com/api/vehicles/");
     getHomeworld("https://swapi.py4e.com/api/planets/");
-    findPeopleInVehicles(vehiclesPilotsArray);
   }
 
   function findPeopleInVehicles(vehiclesArray) {
-    return vehiclesArray.forEach((arr) =>
-      arr.langth > 1
-        ? findPeopleInVehicles(arr)
-        : peopleNamesArray.find((p) => p.url === arr[0])
-    );
+    // console.log(vehiclesArray);
+    return vehiclesArray?.forEach((arr) => {
+      // console.log(arr.length)
+      for (let i = 0; i < arr.length; i++) {
+        // debugger;
+        peopleNamesArray.forEach(
+          (p) => console.log(p)
+          //  p.url === arr[i]
+        );
+      }
+    });
   }
 
   return (
