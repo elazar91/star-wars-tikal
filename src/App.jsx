@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 function App() {
   const [vehicles, setVehicles] = useState();
   const [peoples, setPeoples] = useState();
-  const [population, setPopulation] = useState();
+  const [planets, setPlanets] = useState();
 
   useEffect(
     getAllDitales,
@@ -80,12 +80,13 @@ function App() {
         homeworldArray.push({
           name: data.results[i].name,
           population: data.results[i].population,
+          url: data.results[i].url,
         });
       }
       if (data.next) {
         getHomeworld(data.next);
       } else {
-        setPopulation(homeworldArray);
+        setPlanets(homeworldArray);
         console.log("homeWorld: ", homeworldArray);
       }
     }
@@ -100,11 +101,16 @@ function App() {
     return vehiclesArray?.forEach((arr) => {
       // console.log(arr.length)
       for (let i = 0; i < arr.length; i++) {
-        // debugger;
-        peopleNamesArray.forEach(
-          (p) => console.log(p)
-          //  p.url === arr[i]
-        );
+        peoples?.forEach((p) => {
+          if (p.url === arr[i]) {
+            debugger;
+            planets.forEach((planet) => {
+              if (planet.url === p.homeworld) {
+                console.log(`${planet.name} population: ${planet.population}`);
+              }
+            });
+          }
+        });
       }
     });
   }
