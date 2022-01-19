@@ -8,6 +8,7 @@ function App() {
   const [vehicles, setVehicles] = useState();
   const [peoples, setPeoples] = useState();
   const [planets, setPlanets] = useState();
+  const [populationByVehicles, setPopulationByVehicles] = useState();
 
   useEffect(
     getAllDitales,
@@ -22,6 +23,7 @@ function App() {
   const vehiclesPilotsArray = [];
   const peopleNamesArray = [];
   const homeworldArray = [];
+  const populationByVehiclesArray = [];
 
   function getAllDitales() {
     function getAllPeopel(apiURL) {
@@ -61,6 +63,7 @@ function App() {
           vehiclesPilotsArray.push({
             pailotUrl: data.results[i].pilots,
             name: data.results[i].name,
+            sumPopulation: 0,
           });
         }
       }
@@ -100,19 +103,36 @@ function App() {
   }
 
   function findPeopleInVehicles(vehiclesArray) {
-    // console.log(vehiclesArray);
     return vehiclesArray?.forEach((arr) => {
       for (let i = 0; i < arr.pailotUrl.length; i++) {
         peoples?.forEach((p) => {
           if (p.url === arr.pailotUrl[i]) {
             planets.forEach((planet) => {
               if (planet.url === p.homeworld) {
-                console.log(`${arr.name} population: ${planet.population}`);
+                populationByVehiclesArray.push({
+                  name: arr.name,
+                  population: planet.population,
+                });
+                setPopulationByVehicles(
+                  mergePupolationByVehiclesArray(populationByVehiclesArray)
+                );
+                // console.log(
+                //   mergePupolationByVehiclesArray(populationByVehiclesArray)
+                // );
               }
             });
           }
         });
       }
+    });
+  }
+
+  function mergePupolationByVehiclesArray(objArr) {
+    objArr.forEach((obj) => {
+      vehicles.forEach((v) => {
+        if (v.name === obj.name) v.sumPopulation += obj.population * 1;
+      });
+      console.log(vehicles);
     });
   }
 
