@@ -8,8 +8,12 @@ function App() {
   const [vehicles, setVehicles] = useState();
   const [peoples, setPeoples] = useState();
   const [planets, setPlanets] = useState();
-  const [populationByVehicles, setPopulationByVehicles] = useState();
+  // const [populationByVehicles, setPopulationByVehicles] = useState();
+  const [largesPopulationByVehicles, setLargesPopulationByVehicles] =
+    useState();
+  let largestPopulationByVehicles = {};
 
+  // console.log(populationByVehicles);
   useEffect(
     getAllDitales,
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -20,6 +24,7 @@ function App() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [peoples]
   );
+
   const vehiclesPilotsArray = [];
   const peopleNamesArray = [];
   const homeworldArray = [];
@@ -47,7 +52,6 @@ function App() {
         getAllPeopel(data.next);
       } else {
         setPeoples(peopleNamesArray);
-        console.log("people: ", peopleNamesArray);
       }
     }
 
@@ -71,7 +75,6 @@ function App() {
         getAllVehicles(data.next);
       } else {
         setVehicles(vehiclesPilotsArray);
-        console.log("vehicles: ", vehiclesPilotsArray);
       }
     }
 
@@ -93,7 +96,6 @@ function App() {
         getHomeworld(data.next);
       } else {
         setPlanets(homeworldArray);
-        console.log("homeWorld: ", homeworldArray);
       }
     }
 
@@ -113,11 +115,8 @@ function App() {
                   name: arr.name,
                   population: planet.population,
                 });
-                setPopulationByVehicles(
-                  mergePupolationByVehiclesArray(populationByVehiclesArray)
-                );
-                // console.log(
-                //   mergePupolationByVehiclesArray(populationByVehiclesArray)
+                // setPopulationByVehicles(
+                mergePupolationByVehiclesArray(populationByVehiclesArray);
                 // );
               }
             });
@@ -132,14 +131,27 @@ function App() {
       vehicles.forEach((v) => {
         if (v.name === obj.name) v.sumPopulation += obj.population * 1;
       });
-      console.log(vehicles);
+      largestPopulationByVehicles = returnLagest(vehicles);
+      const thePilots = peoples.filter(
+        (people) => people.url === vehicles.pailotUrl
+      );
+      setLargesPopulationByVehicles({
+        ...largestPopulationByVehicles,
+        thePilots,
+      });
     });
   }
 
+  function returnLagest(vehicles) {
+    return vehicles.reduce((acc, cur) => {
+      return acc.sum > cur.sum ? acc : cur;
+    });
+  }
+  console.log(largesPopulationByVehicles);
   return (
     <div className="App">
-      <Table />
-      <Graph />
+      <Table population={largesPopulationByVehicles} />
+      <Graph planets={planets} />
     </div>
   );
 }
