@@ -31,9 +31,9 @@ function App() {
   const populationByVehiclesArray = [];
 
   function getAllDitales() {
-    function getAllPeopel(apiURL) {
+    function getDitales(apiURL, showDitales) {
       axios.get(apiURL).then((response) => {
-        showAllPeopel(response.data);
+        showDitales(response.data, showDitales);
       });
     }
 
@@ -49,16 +49,10 @@ function App() {
         }
       }
       if (data.next) {
-        getAllPeopel(data.next);
+        getDitales(data.next, showAllPeopel);
       } else {
         setPeoples(peopleNamesArray);
       }
-    }
-
-    function getAllVehicles(apiURL) {
-      axios.get(apiURL).then((response) => {
-        showAllVehicles(response.data);
-      });
     }
 
     function showAllVehicles(data) {
@@ -72,16 +66,10 @@ function App() {
         }
       }
       if (data.next) {
-        getAllVehicles(data.next);
+        getDitales(data.next, showAllVehicles);
       } else {
         setVehicles(vehiclesPilotsArray);
       }
-    }
-
-    function getHomeworld(apiURL) {
-      axios.get(apiURL).then((response) => {
-        showHomeworld(response.data);
-      });
     }
 
     function showHomeworld(data) {
@@ -93,15 +81,15 @@ function App() {
         });
       }
       if (data.next) {
-        getHomeworld(data.next);
+        getDitales(data.next, showHomeworld);
       } else {
         setPlanets(homeworldArray);
       }
     }
 
-    getAllPeopel("https://swapi.py4e.com/api/people/");
-    getAllVehicles("https://swapi.py4e.com/api/vehicles/");
-    getHomeworld("https://swapi.py4e.com/api/planets/");
+    getDitales("https://swapi.py4e.com/api/people/", showAllPeopel);
+    getDitales("https://swapi.py4e.com/api/vehicles/", showAllVehicles);
+    getDitales("https://swapi.py4e.com/api/planets/", showHomeworld);
   }
 
   function findPeopleInVehicles(vehiclesArray) {
