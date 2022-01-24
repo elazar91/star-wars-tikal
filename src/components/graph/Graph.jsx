@@ -2,14 +2,6 @@ import React from "react";
 import style from "./Graph.module.scss";
 
 const Graph = (props) => {
-  if (props.planets)
-    console.log(
-      props.planets[0].population / 200000,
-      props.planets[1].population / 200000,
-      props.planets[5].population / 200000,
-      props.planets[6].population / 200000,
-      props.planets[7].population / 200000
-    );
   if (props.planets) {
     return (
       <div className={style.wrapGraph}>

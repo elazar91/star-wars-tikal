@@ -6,27 +6,26 @@ import { useEffect, useState } from "react";
 
 function App() {
   const [vehicles, setVehicles] = useState();
-  const [peoples, setPeoples] = useState();
+  const [pilots, setPilots] = useState();
   const [planets, setPlanets] = useState();
-  // const [populationByVehicles, setPopulationByVehicles] = useState();
-  const [largesPopulationByVehicles, setLargesPopulationByVehicles] =
-    useState();
+  const [vehicleData, setVehicleData] = useState();
+  const [data, setData] = useState();
   let largestPopulationByVehicles = {};
+  // let filterdData = [];
 
-  // console.log(populationByVehicles);
   useEffect(
     getAllDitales,
     // eslint-disable-next-line react-hooks/exhaustive-deps
     []
   );
   useEffect(
-    () => findPeopleInVehicles(vehicles),
+    () => findPilotInVehicles(vehicles),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [peoples]
+    [pilots]
   );
 
   const vehiclesPilotsArray = [];
-  const peopleNamesArray = [];
+  const pilotsArray = [];
   const homeworldArray = [];
   const populationByVehiclesArray = [];
 
@@ -37,10 +36,10 @@ function App() {
       });
     }
 
-    function showAllPeopel(data) {
+    function showAllPilotes(data) {
       for (let i = 0; i < data.results.length; i++) {
         if (data.results[i].vehicles.length > 0) {
-          peopleNamesArray.push({
+          pilotsArray.push({
             name: data.results[i].name,
             homeworld: data.results[i].homeworld,
             vehicles: data.results[i].vehicles,
@@ -49,9 +48,9 @@ function App() {
         }
       }
       if (data.next) {
-        getDitales(data.next, showAllPeopel);
+        getDitales(data.next, showAllPilotes);
       } else {
-        setPeoples(peopleNamesArray);
+        setPilots(pilotsArray);
       }
     }
 
@@ -59,7 +58,7 @@ function App() {
       for (let i = 0; i < data.results.length; i++) {
         if (data.results[i].pilots?.length >= 1) {
           vehiclesPilotsArray.push({
-            pailotUrl: data.results[i].pilots,
+            pilotUrl: data.results[i].pilots,
             name: data.results[i].name,
             sumPopulation: 0,
           });
@@ -87,25 +86,25 @@ function App() {
       }
     }
 
-    getDitales("https://swapi.py4e.com/api/people/", showAllPeopel);
+    getDitales("https://swapi.py4e.com/api/people/", showAllPilotes);
     getDitales("https://swapi.py4e.com/api/vehicles/", showAllVehicles);
     getDitales("https://swapi.py4e.com/api/planets/", showHomeworld);
   }
 
-  function findPeopleInVehicles(vehiclesArray) {
+  function findPilotInVehicles(vehiclesArray) {
     return vehiclesArray?.forEach((arr) => {
-      for (let i = 0; i < arr.pailotUrl.length; i++) {
-        peoples?.forEach((p) => {
-          if (p.url === arr.pailotUrl[i]) {
+      for (let i = 0; i < arr.pilotUrl.length; i++) {
+        pilots?.forEach((p) => {
+          if (p.url === arr.pilotUrl[i]) {
             planets.forEach((planet) => {
               if (planet.url === p.homeworld) {
                 populationByVehiclesArray.push({
                   name: arr.name,
                   population: planet.population,
+                  pilot: p,
                 });
-                // setPopulationByVehicles(
                 mergePupolationByVehiclesArray(populationByVehiclesArray);
-                // );
+                // setData(p);
               }
             });
           }
@@ -115,18 +114,19 @@ function App() {
   }
 
   function mergePupolationByVehiclesArray(objArr) {
+    let planet;
     objArr.forEach((obj) => {
       vehicles.forEach((v) => {
-        if (v.name === obj.name) v.sumPopulation += obj.population * 1;
+        if (v.name === obj.name) {
+          v.sumPopulation += obj.population * 1;
+          planet = obj;
+        }
       });
-      largestPopulationByVehicles = returnLagest(vehicles);
-      const thePilots = peoples.filter(
-        (people) => people.url === vehicles.pailotUrl
-      );
-      setLargesPopulationByVehicles({
-        ...largestPopulationByVehicles,
-        thePilots,
-      });
+    });
+    largestPopulationByVehicles = returnLagest(vehicles);
+    setVehicleData({
+      ...largestPopulationByVehicles,
+      ...planet,
     });
   }
 
@@ -135,10 +135,10 @@ function App() {
       return acc.sum > cur.sum ? acc : cur;
     });
   }
-  console.log(largesPopulationByVehicles);
+
   return (
     <div className="App">
-      <Table population={largesPopulationByVehicles} />
+      <Table data={vehicleData} />
       <Graph planets={planets} />
     </div>
   );
