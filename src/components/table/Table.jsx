@@ -2,7 +2,6 @@ import React from "react";
 import "./Table.scss";
 
 const Table = (props) => {
-  console.log(props);
   return (
     <table cellSpacing="0">
       <colgroup>
