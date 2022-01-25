@@ -9,9 +9,7 @@ function App() {
   const [pilots, setPilots] = useState();
   const [planets, setPlanets] = useState();
   const [vehicleData, setVehicleData] = useState();
-  const [data, setData] = useState();
   let largestPopulationByVehicles = {};
-  // let filterdData = [];
 
   useEffect(
     getAllDitales,
@@ -105,7 +103,6 @@ function App() {
                   planet,
                 });
                 mergePupolationByVehiclesArray(populationByVehiclesArray);
-                // setData(p);
               }
             });
           }
