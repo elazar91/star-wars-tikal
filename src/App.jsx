@@ -102,6 +102,7 @@ function App() {
                   name: arr.name,
                   population: planet.population,
                   pilot: p,
+                  planet,
                 });
                 mergePupolationByVehiclesArray(populationByVehiclesArray);
                 // setData(p);

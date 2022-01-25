@@ -2,6 +2,7 @@ import React from "react";
 import "./Table.scss";
 
 const Table = (props) => {
+  console.log(props);
   return (
     <table cellSpacing="0">
       <colgroup>
@@ -15,7 +16,9 @@ const Table = (props) => {
         </tr>
         <tr>
           <td>Related home planets and their respective population</td>
-          <td>{props.data?.sumPopulation}</td>
+          <td>
+            {props.data?.planet.name} {props.data?.sumPopulation}
+          </td>
         </tr>
         <tr>
           <td>Related pilot names</td>
